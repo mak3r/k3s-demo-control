@@ -15,14 +15,14 @@ deployDSPin4 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f
 undeployDSPin4 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml delete -f /home/pi/workloads/blue-ds.yaml'
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
-def button_a(button, released):
+def button_a_release(button, released):
     global buttonAHold
     if buttonAHold == False:
         subprocess.check_call(deployDSPin4)
     buttonAHold = False
 
 @buttonshim.on_hold(buttonshim.BUTTON_A)
-def button_a(button):
+def button_a_hold(button):
     global buttonAHold
     os.system(undeployDSPin4)
     buttonAHold = True
@@ -34,14 +34,14 @@ undeployPodPin5 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml delete -f /home
 scaleUpPodPin5 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml scale --replicas=3 pod/white-pod'
 
 @buttonshim.on_release(buttonshim.BUTTON_B)
-def button_b(button, released):
+def button_b_release(button, released):
     global buttonBHold
     if buttonBHold == False:
         os.system(deployPodPin5)
     buttonBHold = False
 
 @buttonshim.on_hold(buttonshim.BUTTON_B)
-def button_b(button):
+def button_b_hold(button):
     global buttonBHold
     os.system(undeployPodPin5)
     buttonBHold = True
@@ -53,14 +53,14 @@ undeployPodPin5 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml delete -f /home
 scaleUpPodPin5 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml scale --replicas=3 pod/white-pod'
 
 @buttonshim.on_release(buttonshim.BUTTON_C)
-def button_c(button, released):
+def button_c_release(button, released):
     global buttonCHold
     if buttonCHold == False:
         os.system(scaleUpPodPin5)
     buttonCHold = False
 
 @buttonshim.on_hold(buttonshim.BUTTON_C)
-def button_c(button):
+def button_c_hold(button):
     global buttonCHold
     os.system(undeployPodPin5)
     buttonCHold = True
