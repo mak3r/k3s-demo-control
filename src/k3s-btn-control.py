@@ -12,21 +12,30 @@ Press Ctrl+C to exit.
 
 buttonAHold = False
 deployDSPin4 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/blue-ds.yaml"]
-undeployDSPin4 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml delete -f /home/pi/workloads/blue-ds.yaml'
+undeployDSPin4 =["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/blue-ds.yaml"]
+
+def releasedA():
+    subprocess.check_call(deployDSPin4)
+
+def holdA():
+    subprocess.check_call(undeployDSPin4)
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
-def button_a_release(button, released):
+def button_a_release(button, releasedA):
+"""
     global buttonAHold
     if buttonAHold == False:
         subprocess.check_call(deployDSPin4)
     buttonAHold = False
+"""
 
 @buttonshim.on_hold(buttonshim.BUTTON_A)
-def button_a_hold(button):
+def button_a_hold(button, holdA):
+"""
     global buttonAHold
     os.system(undeployDSPin4)
     buttonAHold = True
-
+"""
 
 buttonBHold = False
 deployPodPin5 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml apply -f /home/pi/workloads/white-pod.yaml'
