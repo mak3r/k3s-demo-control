@@ -11,7 +11,7 @@ Press Ctrl+C to exit.
 """)
 
 buttonAHold = False
-deployDSPin4 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f /home/pi/workloads/blue-ds.yaml"]
+deployDSPin4 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/blue-ds.yaml"]
 undeployDSPin4 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml delete -f /home/pi/workloads/blue-ds.yaml'
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
