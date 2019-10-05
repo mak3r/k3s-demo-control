@@ -17,7 +17,7 @@ def button_a(button, pressed):
     os.system(deployDSPin4)
 
 @buttonshim.on_hold(buttonshim.BUTTON_A)
-def button_a(button, pressed):
+def button_a(button):
     os.system(undeployDSPin4)
 
 
