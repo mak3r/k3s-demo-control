@@ -17,7 +17,7 @@ buttonAHold = False
 def button_a(button, released):
     if buttonAHold == False:
         os.system(deployDSPin4)
-    buttonAHold = False:
+    buttonAHold = False
 
 @buttonshim.on_hold(buttonshim.BUTTON_A)
 def button_a(button):
