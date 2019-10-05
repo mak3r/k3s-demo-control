@@ -11,15 +11,18 @@ Press Ctrl+C to exit.
 
 deployDSPin4 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml apply -f /home/pi/workloads/blue-ds.yaml'
 undeployDSPin4 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml delete -f /home/pi/workloads/blue-ds.yaml'
+buttonAHold = False
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
-def button_a(button, pressed):
-    os.system(deployDSPin4)
+def button_a(button, released):
+    if buttonAHold == False:
+        os.system(deployDSPin4)
+    buttonAHold = False:
 
 @buttonshim.on_hold(buttonshim.BUTTON_A)
 def button_a(button):
     os.system(undeployDSPin4)
-
+    buttonAHold = True
 
 @buttonshim.on_press(buttonshim.BUTTON_A)
 def button_a(button, pressed):
