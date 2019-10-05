@@ -9,8 +9,8 @@ Control the k3s-arm-demo
 Press Ctrl+C to exit.
 """)
 
-deployDSPin4 = 'kubectl --kubeconfig=/home/pi/kubeconfig apply -f /home/pi/workloads/blue-ds.yaml'
-undeployDSPin4 = 'kubectl --kubeconfig=/home/pi/kubeconfig apply -f /home/pi/workloads/blue-ds.yaml'
+deployDSPin4 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml apply -f /home/pi/workloads/blue-ds.yaml'
+undeployDSPin4 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml apply -f /home/pi/workloads/blue-ds.yaml'
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
 def button_a(button, pressed):
