@@ -22,20 +22,20 @@ def holdA():
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
 def button_a_release(button, releasedA):
-"""
+    """
     global buttonAHold
     if buttonAHold == False:
         subprocess.check_call(deployDSPin4)
     buttonAHold = False
-"""
+    """
 
 @buttonshim.on_hold(buttonshim.BUTTON_A)
 def button_a_hold(button, holdA):
-"""
+    """
     global buttonAHold
     os.system(undeployDSPin4)
     buttonAHold = True
-"""
+    """
 
 buttonBHold = False
 deployPodPin5 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml apply -f /home/pi/workloads/white-pod.yaml'
