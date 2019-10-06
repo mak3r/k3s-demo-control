@@ -24,14 +24,15 @@ def button_a_press(button, pressed):
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
 def button_a_release(button, pressed):
+    global buttonA_was_held
     print("on_release A", buttonA_was_held)
     if not buttonA_was_held:
         subprocess.check_call(deployDSPin4)
 
 @buttonshim.on_hold(buttonshim.BUTTON_A, hold_time=2)
 def button_a_hold(button):
-    print("begin on_hold A", buttonA_was_held)
     global buttonA_was_held
+    print("begin on_hold A", buttonA_was_held)
     subprocess.check_call(undeployDSPin4)
     buttonA_was_held = True
     print("end on_hold A", buttonA_was_held)
