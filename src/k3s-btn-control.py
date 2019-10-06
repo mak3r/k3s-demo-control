@@ -46,22 +46,20 @@ def button_A_press(button, pressed):
     global buttonA_was_held
     buttonshim.set_pixel(0x94, 0x00, 0xd3)
     buttonA_was_held = False
-    print("on_press A", buttonA_was_held)
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
 def button_A_release(button, pressed):
     global buttonA_was_held
-    print("on_release A", buttonA_was_held)
     if not buttonA_was_held:
         subprocess.check_call(deployDSPin4)
+        print(deployDSPin4)
 
 @buttonshim.on_hold(buttonshim.BUTTON_A, hold_time=2)
 def button_A_hold(button):
     global buttonA_was_held
-    print("begin on_hold A", buttonA_was_held)
     buttonA_was_held = True
     subprocess.check_call(undeployDSPin4)
-    print("end on_hold A", buttonA_was_held)
+    print(undeployDSPin4)
 
 # Button B
 @buttonshim.on_press(buttonshim.BUTTON_B)
@@ -69,22 +67,20 @@ def button_B_press(button, pressed):
     global buttonB_was_held
     buttonshim.set_pixel(0x00, 0x00, 0xff)
     buttonB_was_held = False
-    print("on_press B", buttonB_was_held)
 
 @buttonshim.on_release(buttonshim.BUTTON_B)
 def button_B_release(button, pressed):
     global buttonB_was_held
-    print("on_release B", buttonB_was_held)
     if not buttonB_was_held:
         subprocess.check_call(deployPodPin5)
+        print(deployPodPin5)
 
 @buttonshim.on_hold(buttonshim.BUTTON_B, hold_time=2)
 def button_B_hold(button):
     global buttonB_was_held
-    print("begin on_hold B", buttonB_was_held)
     buttonB_was_held = True
     subprocess.check_call(undeployPodPin5)
-    print("end on_hold B", buttonB_was_held)
+    print(undeployPodPin5)
 
 # Button C
 @buttonshim.on_press(buttonshim.BUTTON_C)
@@ -92,22 +88,20 @@ def button_C_press(button, pressed):
     global buttonC_was_held
     buttonshim.set_pixel(0x00, 0xff, 0x00)
     buttonC_was_held = False
-    print("on_press C", buttonC_was_held)
 
 @buttonshim.on_release(buttonshim.BUTTON_C)
 def button_C_release(button, pressed):
     global buttonC_was_held
-    print("on_release C", buttonC_was_held)
     if not buttonC_was_held:
         subprocess.check_call(scaleUpPodPin5)
+        print(scaleUpPodPin5)
 
 @buttonshim.on_hold(buttonshim.BUTTON_C, hold_time=2)
 def button_C_hold(button):
     global buttonC_was_held
-    print("begin on_hold C", buttonC_was_held)
     buttonC_was_held = True
     subprocess.check_call(scaleDownPodPin5)
-    print("end on_hold C", buttonC_was_held)
+    print(scaleDownPodPin5)
 
 # Button D
 @buttonshim.on_press(buttonshim.BUTTON_D)
@@ -115,22 +109,20 @@ def button_D_press(button, pressed):
     global buttonD_was_held
     buttonshim.set_pixel(0xff, 0xff, 0x00)
     buttonD_was_held = False
-    print("on_press D", buttonD_was_held)
 
 @buttonshim.on_release(buttonshim.BUTTON_D)
 def button_D_release(button, pressed):
     global buttonD_was_held
-    print("on_release D", buttonD_was_held)
     if not buttonD_was_held:
         subprocess.check_call(deployAudioJobMaster)
+        print(deployAudioJobMaster)
 
 @buttonshim.on_hold(buttonshim.BUTTON_D, hold_time=2)
 def button_D_hold(button):
     global buttonD_was_held
-    print("begin on_hold D", buttonD_was_held)
     buttonD_was_held = True
     subprocess.check_call(undeployAudioJobMaster)
-    print("end on_hold D", buttonD_was_held)
+    print(undeployAudioJobMaster)
 
 # Button E
 @buttonshim.on_press(buttonshim.BUTTON_E)
@@ -138,22 +130,18 @@ def button_E_press(button, pressed):
     global buttonE_was_held
     buttonshim.set_pixel(0xff, 0x00, 0x00)
     buttonE_was_held = False
-    print("on_press E", buttonE_was_held)
 
 @buttonshim.on_release(buttonshim.BUTTON_E)
 def button_E_release(button, pressed):
     global buttonE_was_held
-    print("on_release E", buttonE_was_held)
     if not buttonE_was_held:
         subprocess.check_call(deployDSPin4)
 
 @buttonshim.on_hold(buttonshim.BUTTON_E, hold_time=2)
 def button_E_hold(button):
     global buttonE_was_held
-    print("begin on_hold E", buttonE_was_held)
     buttonE_was_held = True
     subprocess.check_call(undeployDSPin4)
-    print("end on_hold E", buttonE_was_held)
 
 
 
