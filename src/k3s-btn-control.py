@@ -18,7 +18,7 @@ undeployDSPin4 =["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "
 @buttonshim.on_press(buttonshim.BUTTON_A)
 def button_a_press(button, pressed):
     global buttonA_was_held
-    buttonshim.set_pixel(0x94, 0x00, 0xd3)
+    buttonshim.set_pixel(0x94, 0x00, 0xd4)
     buttonA_was_held = False
     print("on_press A", buttonA_was_held)
 
