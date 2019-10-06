@@ -40,7 +40,12 @@ undeployAudioJobMaster = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "d
 
 buttonE_was_held = False
 undeployScout = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/scout.yaml"]
-undeployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "deployment", "power-pod", "-n", "k3s-arm-demo"]
+# don't do this
+# undeployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "deployment", "power-pod", "-n", "k3s-arm-demo"]
+
+# delete the tc-enable-activated file process
+#SCOUT_POD=$(kubectl get pods -n k3s-arm-demo --selector=app=scout -o jsonpath='{.items[0].metadata.name}' --kubeconfig="$KUBECONFIG")
+#   kubectl exec --kubeconfig=/home/pi/kubeconfig.yaml -n k3s-arm-demo $SCOUT_POD -- /usr/bin/touch /usr/local/share/k3s/tc-enable-activated
 
 
 # Button A
@@ -146,7 +151,7 @@ def button_E_release(button, pressed):
 def button_E_hold(button):
     global buttonE_was_held
     buttonE_was_held = True
-    subprocess.check_call(undeployPowerPod)
+    subprocess.check_call(undeployScout)
 
 
 
