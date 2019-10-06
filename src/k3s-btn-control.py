@@ -29,7 +29,7 @@ def button_a_release(button, releasedA):
     buttonAHold = False
     """
 
-@buttonshim.on_hold(buttonshim.BUTTON_A)
+@buttonshim.on_hold(buttonshim.BUTTON_A, holdA)
 def button_a_hold(button, holdA):
     """
     global buttonAHold
