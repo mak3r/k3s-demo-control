@@ -26,7 +26,7 @@ def button_a_release(button, releasedA):
         subprocess.check_call(deployDSPin4)
 
 @buttonshim.on_hold(buttonshim.BUTTON_A)
-def button_a_hold(button, holdA):
+def button_a_hold(button):
     global buttonAHold
     subprocess.check_call(undeployDSPin4)
     buttonAHold = True
