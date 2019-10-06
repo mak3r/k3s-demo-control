@@ -33,8 +33,8 @@ def button_a_release(button, pressed):
 def button_a_hold(button):
     global buttonA_was_held
     print("begin on_hold A", buttonA_was_held)
-    subprocess.check_call(undeployDSPin4)
     buttonA_was_held = True
+    subprocess.check_call(undeployDSPin4)
     print("end on_hold A", buttonA_was_held)
 
 buttonBHold = False
