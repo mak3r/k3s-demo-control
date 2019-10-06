@@ -39,6 +39,7 @@ deployAudioJobMaster = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "app
 undeployAudioJobMaster = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/audio-job.yaml"]
 
 buttonE_was_held = False
+undeployScout = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/scout.yaml"]
 
 
 # Button A
@@ -138,13 +139,13 @@ def button_E_press(button, pressed):
 def button_E_release(button, pressed):
     global buttonE_was_held
     if not buttonE_was_held:
-        subprocess.check_call(deployDSPin4)
+        subprocess.check_call(undeployScout)
 
 @buttonshim.on_hold(buttonshim.BUTTON_E, hold_time=2)
 def button_E_hold(button):
     global buttonE_was_held
     buttonE_was_held = True
-    subprocess.check_call(undeployDSPin4)
+    subprocess.check_call(undeployScout)
 
 
 
