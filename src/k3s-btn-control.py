@@ -122,14 +122,14 @@ def button_D_release(button, pressed):
     global buttonD_was_held
     print("on_release D", buttonD_was_held)
     if not buttonD_was_held:
-        subprocess.check_call(deployDSPin4)
+        subprocess.check_call(deployAudioJobMaster)
 
 @buttonshim.on_hold(buttonshim.BUTTON_D, hold_time=2)
 def button_D_hold(button):
     global buttonD_was_held
     print("begin on_hold D", buttonD_was_held)
     buttonD_was_held = True
-    subprocess.check_call(undeployDSPin4)
+    subprocess.check_call(undeployAudioJobMaster)
     print("end on_hold D", buttonD_was_held)
 
 # Button E
