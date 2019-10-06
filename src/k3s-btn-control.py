@@ -146,7 +146,7 @@ def button_E_release(button, pressed):
 def button_E_hold(button):
     global buttonE_was_held
     buttonE_was_held = True
-    subprocess.check_call(undeployScout)
+    subprocess.check_call(undeployPowerPod)
 
 
 
