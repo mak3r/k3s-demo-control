@@ -30,8 +30,9 @@ deployPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-
 undeployPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/white-pod.yaml"]
 
 buttonC_was_held = False
-scaleUpPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "scale", "--replicas=" + str(upScale()), "deployment/white-pod", "-n", "k3s-arm-demo"]
-scaleDownPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "scale", "--replicas=" + str(downScale()), "deployment/white-pod", "-n", "k3s-arm-demo"]
+# Simplify this by making them not global so we change the value of scale every time we execute
+# scaleUpPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "scale", "--replicas=" + str(upScale()), "deployment/white-pod", "-n", "k3s-arm-demo"]
+# scaleDownPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "scale", "--replicas=" + str(downScale()), "deployment/white-pod", "-n", "k3s-arm-demo"]
 
 buttonD_was_held = False
 deployAudioJobMaster = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/audio-job.yaml"]
@@ -93,6 +94,7 @@ def button_C_press(button, pressed):
 def button_C_release(button, pressed):
     global buttonC_was_held
     if not buttonC_was_held:
+        scaleUpPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "scale", "--replicas=" + str(upScale()), "deployment/white-pod", "-n", "k3s-arm-demo"]
         subprocess.check_call(scaleUpPodPin5)
         print(scaleUpPodPin5)
 
@@ -100,6 +102,7 @@ def button_C_release(button, pressed):
 def button_C_hold(button):
     global buttonC_was_held
     buttonC_was_held = True
+    scaleDownPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "scale", "--replicas=" + str(downScale()), "deployment/white-pod", "-n", "k3s-arm-demo"]
     subprocess.check_call(scaleDownPodPin5)
     print(scaleDownPodPin5)
 
