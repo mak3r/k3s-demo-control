@@ -19,13 +19,13 @@ undeployDSPin4 =["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "
 def button_a_press(button, pressedA):
     global buttonAHold
     buttonAHold = False
-    print("on_press A")
+    print("on_press A", buttonAHold)
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
 def button_a_release(button, releasedA):
     if not buttonAHold:
         subprocess.check_call(deployDSPin4)
-    print("on_release A")
+    print("on_release A", buttonAHold)
 
 
 @buttonshim.on_hold(buttonshim.BUTTON_A)
@@ -33,7 +33,7 @@ def button_a_hold(button):
     global buttonAHold
     subprocess.check_call(undeployDSPin4)
     buttonAHold = True
-    print("on_hold A")
+    print("on_hold A", buttonAHold)
 
 buttonBHold = False
 deployPodPin5 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml apply -f /home/pi/workloads/white-pod.yaml'
