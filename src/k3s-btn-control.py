@@ -10,30 +10,30 @@ Control the k3s-arm-demo
 Press Ctrl+C to exit.
 """)
 
-buttonAHold = False
+buttonA_was_held = False
 deployDSPin4 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/blue-ds.yaml"]
 undeployDSPin4 =["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/blue-ds.yaml"]
 
 
 @buttonshim.on_press(buttonshim.BUTTON_A)
 def button_a_press(button, pressedA):
-    global buttonAHold
-    buttonAHold = False
-    print("on_press A", buttonAHold)
+    global buttonA_was_held
+    buttonA_was_held = False
+    print("on_press A", buttonA_was_held)
 
 @buttonshim.on_release(buttonshim.BUTTON_A)
 def button_a_release(button, releasedA):
-    if not buttonAHold:
+    if not buttonA_was_held:
         subprocess.check_call(deployDSPin4)
-    print("on_release A", buttonAHold)
+    print("on_release A", buttonA_was_held)
 
 
-@buttonshim.on_hold(buttonshim.BUTTON_A)
+@buttonshim.on_hold(buttonshim.BUTTON_A, hold_time=2)
 def button_a_hold(button):
-    global buttonAHold
+    global buttonA_was_held
     subprocess.check_call(undeployDSPin4)
-    buttonAHold = True
-    print("on_hold A", buttonAHold)
+    buttonA_was_held = True
+    print("on_hold A", buttonA_was_held)
 
 buttonBHold = False
 deployPodPin5 = 'kubectl --kubeconfig=/home/pi/kubeconfig.yaml apply -f /home/pi/workloads/white-pod.yaml'
