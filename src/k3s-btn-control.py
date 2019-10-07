@@ -150,7 +150,7 @@ def E_single_press():
     subprocess.check_call(deployPowerPod)
 # Setup a timer to run when the button is pressed the first time
 # cancel the timer it it's pressed within the alloted time
-E_timer = threading.Timer(1.0, E_single_press)
+E_timer = None
 # track how many times E is pressed 
 E_count = 0
 
@@ -161,7 +161,7 @@ def button_E_press(button, pressed):
     buttonshim.set_pixel(0xff, 0x00, 0x00)
     buttonE_was_held = False
     E_count = E_count + 1
-    print ("E_press E_count=%f", E_count)
+    print ("E_press E_count=", E_count)
 
 @buttonshim.on_release(buttonshim.BUTTON_E)
 def button_E_release(button, pressed):
@@ -172,6 +172,8 @@ def button_E_release(button, pressed):
     if not buttonE_was_held:
         if E_count == 1:
             print("starting timer E_count is 1")
+            E_timer = None
+            E_timer = threading.Timer(1.0, E_single_press)
             E_timer.start()
         if E_count == 2:
             print("cancelling timer E_count is 2")
@@ -186,7 +188,7 @@ def button_E_hold(button):
     global buttonE_was_held
     global E_count
     buttonE_was_held = True
-    print("E_count is: %f. Reset E_count to 0", E_count)
+    print("E_count is:", E_count)
     E_count = 0
 
     subprocess.check_call(deployResetDS)
