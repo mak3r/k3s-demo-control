@@ -5,6 +5,7 @@ import buttonshim
 import os
 import subprocess
 import threading
+import time
 
 print("""
 Control the k3s-arm-demo
@@ -182,12 +183,11 @@ def button_E_hold(button):
     buttonE_was_held = True
     E_count = 0
 
-    sleep = ["sleep", "10"]
     subprocess.check_call(deployResetDS)
-    # TODO: prefer to do this in python but no docs available at the time of writing
-    subprocess.check_call(sleep)
     # undeploy the scout which likely got moved in the drain
     subprocess.check_call(undeployScout)
+    # wait for all the resetDS to complete
+    time.sleep(30)
     # remove the transfer control file that blocks the tc process from running more than once in a cycle
     subprocess.check_call(undeployResetDS)
 
