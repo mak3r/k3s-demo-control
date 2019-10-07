@@ -150,7 +150,7 @@ def E_single_press():
     subprocess.check_call(deployPowerPod)
 # Setup a timer to run when the button is pressed the first time
 # cancel the timer it it's pressed within the alloted time
-E_timer = threading.Timer(1.0, E_single_press())
+E_timer = threading.Timer(1.0, E_single_press)
 # track how many times E is pressed 
 E_count = 0
 
