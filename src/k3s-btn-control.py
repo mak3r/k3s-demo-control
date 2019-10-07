@@ -85,9 +85,11 @@ def button_B_release(button, pressed):
 
 @buttonshim.on_hold(buttonshim.BUTTON_B, hold_time=2)
 def button_B_hold(button):
+    global scale
     global buttonB_was_held
     buttonB_was_held = True
     subprocess.check_call(undeployPodPin5)
+    scale = 1
     print(undeployPodPin5)
 
 # Button C
