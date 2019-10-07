@@ -4,51 +4,20 @@ import signal
 import buttonshim
 import os
 import subprocess
+import threading
 
 print("""
 Control the k3s-arm-demo
 Press Ctrl+C to exit.
 """)
 
-scale=1
-def upScale():
-    global scale
-    scale=scale+1
-    return scale
-
-def downScale():
-    global scale
-    scale=scale-1
-    return scale
-
+##############
+# Button A
+##############
 buttonA_was_held = False
 deployDSPin4 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/blue-ds.yaml"]
 undeployDSPin4 =["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/blue-ds.yaml"]
 
-buttonB_was_held = False
-deployPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/white-pod.yaml"]
-undeployPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/white-pod.yaml"]
-
-buttonC_was_held = False
-# Simplify this by making them not global so we change the value of scale every time we execute
-# scaleUpPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "scale", "--replicas=" + str(upScale()), "deployment/white-pod", "-n", "k3s-arm-demo"]
-# scaleDownPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "scale", "--replicas=" + str(downScale()), "deployment/white-pod", "-n", "k3s-arm-demo"]
-
-buttonD_was_held = False
-deployAudioJobMaster = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/audio-job.yaml"]
-undeployAudioJobMaster = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/audio-job.yaml"]
-
-buttonE_was_held = False
-undeployScout = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/scout.yaml"]
-# don't do this
-# undeployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "deployment", "power-pod", "-n", "k3s-arm-demo"]
-
-# delete the tc-enable-activated file process
-#SCOUT_POD=$(kubectl get pods -n k3s-arm-demo --selector=app=scout -o jsonpath='{.items[0].metadata.name}' --kubeconfig="$KUBECONFIG")
-#   kubectl exec --kubeconfig=/home/pi/kubeconfig.yaml -n k3s-arm-demo $SCOUT_POD -- /usr/bin/touch /usr/local/share/k3s/tc-enable-activated
-
-
-# Button A
 @buttonshim.on_press(buttonshim.BUTTON_A)
 def button_A_press(button, pressed):
     global buttonA_was_held
@@ -69,7 +38,13 @@ def button_A_hold(button):
     subprocess.check_call(undeployDSPin4)
     print(undeployDSPin4)
 
+##############
 # Button B
+##############
+buttonB_was_held = False
+deployPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/white-pod.yaml"]
+undeployPodPin5 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/white-pod.yaml"]
+
 @buttonshim.on_press(buttonshim.BUTTON_B)
 def button_B_press(button, pressed):
     global buttonB_was_held
@@ -92,7 +67,21 @@ def button_B_hold(button):
     scale = 1
     print(undeployPodPin5)
 
+##############
 # Button C
+##############
+buttonC_was_held = False
+scale=1
+def upScale():
+    global scale
+    scale=scale+1
+    return scale
+
+def downScale():
+    global scale
+    scale=scale-1
+    return scale
+
 @buttonshim.on_press(buttonshim.BUTTON_C)
 def button_C_press(button, pressed):
     global buttonC_was_held
@@ -115,7 +104,13 @@ def button_C_hold(button):
     subprocess.check_call(scaleDownPodPin5)
     print(scaleDownPodPin5)
 
+##############
 # Button D
+##############
+buttonD_was_held = False
+deployAudioJobMaster = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/audio-job.yaml"]
+undeployAudioJobMaster = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/audio-job.yaml"]
+
 @buttonshim.on_press(buttonshim.BUTTON_D)
 def button_D_press(button, pressed):
     global buttonD_was_held
@@ -136,28 +131,65 @@ def button_D_hold(button):
     subprocess.check_call(undeployAudioJobMaster)
     print(undeployAudioJobMaster)
 
+##############
 # Button E
+##############
+
+buttonE_was_held = False
+undeployScout = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/scout.yaml"]
+deployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/power-pod.yaml"]
+undeployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "deployment", "power-pod", "-n", "k3s-arm-demo"]
+
+# delete the tc-enable-activated file process
+deployResetDS = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/reset-tc.yaml"]
+undeployResetDS = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/reset-tc.yaml"]
+
+def E_single_press():
+    subprocess.check_call(deployPowerPod)
+# Setup a timer to run when the button is pressed the first time
+# cancel the timer it it's pressed within the alloted time
+E_timer = threading.Timer(1.0, E_single_press())
+# track how many times E is pressed 
+E_count = 0
+
 @buttonshim.on_press(buttonshim.BUTTON_E)
 def button_E_press(button, pressed):
     global buttonE_was_held
+    global E_count
     buttonshim.set_pixel(0xff, 0x00, 0x00)
     buttonE_was_held = False
+    E_count = E_count + 1
+    # TODO: set the timer for button click
 
 @buttonshim.on_release(buttonshim.BUTTON_E)
 def button_E_release(button, pressed):
     global buttonE_was_held
+    global E_count
+    global E_timer
     if not buttonE_was_held:
-        subprocess.check_call(undeployScout)
+        if E_count == 1:
+            E_timer.start()
+        if E_count == 2:
+            E_timer.cancel()
+            subprocess.check_call(undeployPowerPod)
+            E_count = 0
+
 
 @buttonshim.on_hold(buttonshim.BUTTON_E, hold_time=2)
 def button_E_hold(button):
     global buttonE_was_held
+    global E_count
     buttonE_was_held = True
+    E_count = 0
+
+    sleep = ["sleep", "10"]
+    subprocess.check_call(deployResetDS)
+    # TODO: prefer to do this in python but no docs available at the time of writing
+    subprocess.check_call(sleep)
+    # undeploy the scout which likely got moved in the drain
     subprocess.check_call(undeployScout)
-
-
-
-
+    # remove the transfer control file that blocks the tc process from running more than once in a cycle
+    subprocess.check_call(undeployResetDS)
 
 
 signal.pause()
