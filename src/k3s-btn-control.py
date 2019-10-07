@@ -192,12 +192,12 @@ def button_E_hold(button):
     E_count = 0
 
     subprocess.check_call(deployResetDS)
-    # undeploy the scout which likely got moved in the drain
-    subprocess.check_call(undeployScout)
     # wait for all the resetDS to complete
     time.sleep(30)
     # remove the transfer control file that blocks the tc process from running more than once in a cycle
     subprocess.check_call(undeployResetDS)
+    # undeploy the scout which likely got moved in the drain
+    subprocess.check_call(undeployScout)
 
 
 signal.pause()
