@@ -146,6 +146,7 @@ deployResetDS = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-
 undeployResetDS = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/reset-tc.yaml"]
 
 def E_single_press():
+    print ("E_single_press")
     subprocess.check_call(deployPowerPod)
 # Setup a timer to run when the button is pressed the first time
 # cancel the timer it it's pressed within the alloted time
@@ -160,19 +161,23 @@ def button_E_press(button, pressed):
     buttonshim.set_pixel(0xff, 0x00, 0x00)
     buttonE_was_held = False
     E_count = E_count + 1
-    # TODO: set the timer for button click
+    print ("E_press E_count=%f", E_count)
 
 @buttonshim.on_release(buttonshim.BUTTON_E)
 def button_E_release(button, pressed):
     global buttonE_was_held
     global E_count
     global E_timer
+    print("button released")
     if not buttonE_was_held:
         if E_count == 1:
+            print("starting timer E_count is 1")
             E_timer.start()
         if E_count == 2:
+            print("cancelling timer E_count is 2")
             E_timer.cancel()
             subprocess.check_call(undeployPowerPod)
+            print("reset E_count to 0")
             E_count = 0
 
 
@@ -181,6 +186,7 @@ def button_E_hold(button):
     global buttonE_was_held
     global E_count
     buttonE_was_held = True
+    print("E_count is: %f. Reset E_count to 0", E_count)
     E_count = 0
 
     subprocess.check_call(deployResetDS)
