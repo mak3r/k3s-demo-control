@@ -137,17 +137,26 @@ def button_D_hold(button):
 ##############
 
 buttonE_was_held = False
-undeployScout = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/scout.yaml"]
-deployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/power-pod.yaml"]
-undeployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "deployment", "power-pod", "-n", "k3s-arm-demo"]
+# Currently not deploying or undeploying the powerpod
+#deployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/power-pod.yaml"]
+#undeployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "deployment", "power-pod", "-n", "k3s-arm-demo"]
+
+deployFindWorker1 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/find-worker1.yaml"]
+deployFindWorker2 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/find-worker2.yaml"]
+undeployFindWorker1 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/find-worker1.yaml"]
+undeployFindWorker2 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/find-worker2.yaml"]
+
 
 # delete the tc-enable-activated file process
 deployResetDS = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/reset-tc.yaml"]
 undeployResetDS = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/reset-tc.yaml"]
+undeployScout = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/scout.yaml"]
 
 def E_single_press():
     print ("E_single_press")
-    subprocess.check_call(deployPowerPod)
+    subprocess.check_call(deployFindWorker1)
+    subprocess.check_call(deployFindWorker2)
+
 # Setup a timer to run when the button is pressed the first time
 # cancel the timer it it's pressed within the alloted time
 E_timer = None
@@ -178,7 +187,8 @@ def button_E_release(button, pressed):
         if E_count == 2:
             print("cancelling timer E_count is 2")
             E_timer.cancel()
-            subprocess.check_call(undeployPowerPod)
+            subprocess.check_call(undeployFindWorker1)
+            subprocess.check_call(undeployFindWorker2)
             print("reset E_count to 0")
             E_count = 0
 
@@ -191,13 +201,14 @@ def button_E_hold(button):
     print("E_count is:", E_count)
     E_count = 0
 
+    # undeploy the scout which likely got moved in the drain
+    subprocess.check_call(undeployScout)
+    # deploy the reset process
     subprocess.check_call(deployResetDS)
     # wait for all the resetDS to complete
     time.sleep(30)
     # remove the transfer control file that blocks the tc process from running more than once in a cycle
     subprocess.check_call(undeployResetDS)
-    # undeploy the scout which likely got moved in the drain
-    subprocess.check_call(undeployScout)
 
 
 signal.pause()
