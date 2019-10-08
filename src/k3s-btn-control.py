@@ -141,6 +141,17 @@ buttonE_was_held = False
 #deployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/power-pod.yaml"]
 #undeployPowerPod = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "deployment", "power-pod", "-n", "k3s-arm-demo"]
 
+E_scale=1
+def E_upScale():
+    global E_scale
+    E_scale=E_scale+1
+    return E_scale
+
+def E_downScale():
+    global E_scale
+    E_scale=E_scale-1
+    return E_scale
+
 deployFindWorker1 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/find-worker1.yaml"]
 deployFindWorker2 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "apply", "-f", "/home/pi/workloads/find-worker2.yaml"]
 undeployFindWorker1 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "delete", "-f", "/home/pi/workloads/find-worker1.yaml"]
@@ -203,14 +214,12 @@ def button_E_hold(button):
     print("E_count is:", E_count)
     E_count = 0
 
-    # undeploy the scout which likely got moved in the drain
-    subprocess.check_call(undeployScout)
-    # deploy the reset process
-    subprocess.check_call(deployResetDS)
-    # wait for all the resetDS to complete
-    time.sleep(30)
-    # remove the transfer control file that blocks the tc process from running more than once in a cycle
-    subprocess.check_call(undeployResetDS)
+    l_scale = str(E_upScale())
+    scaleFindWorker1 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "--replicas=" + l_scale, "/home/pi/workloads/find-worker1.yaml"]
+    scaleFindWorker2 = ["kubectl", "--kubeconfig=/home/pi/kubeconfig.yaml", "--replicas=" + l_scale, "/home/pi/workloads/find-worker2.yaml"]
+
+    subprocess.check_call(scaleFindWorker1)
+    subprocess.check_call(scaleFindWorker2)
 
 
 signal.pause()
