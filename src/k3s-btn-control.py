@@ -215,8 +215,8 @@ def button_E_hold(button):
     E_count = 0
 
     l_scale = str(E_upScale())
-    scaleFindWorker1 = ["kubectl", "scale", "--kubeconfig=/home/pi/kubeconfig.yaml", "--replicas=" + l_scale, "/home/pi/workloads/find-worker1.yaml"]
-    scaleFindWorker2 = ["kubectl", "scale", "--kubeconfig=/home/pi/kubeconfig.yaml", "--replicas=" + l_scale, "/home/pi/workloads/find-worker2.yaml"]
+    scaleFindWorker1 = ["kubectl", "scale", "--kubeconfig=/home/pi/kubeconfig.yaml", "--replicas=" + l_scale, "-f", "/home/pi/workloads/find-worker1.yaml"]
+    scaleFindWorker2 = ["kubectl", "scale", "--kubeconfig=/home/pi/kubeconfig.yaml", "--replicas=" + l_scale, "-f", "/home/pi/workloads/find-worker2.yaml"]
 
     subprocess.check_call(scaleFindWorker1)
     subprocess.check_call(scaleFindWorker2)
