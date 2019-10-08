@@ -170,6 +170,8 @@ def button_E_press(button, pressed):
     buttonshim.set_pixel(0xff, 0x00, 0x00)
     buttonE_was_held = False
     E_count = E_count + 1
+    if E_count > 3:
+        E_count = 0
     print ("E_press E_count=", E_count)
 
 @buttonshim.on_release(buttonshim.BUTTON_E)
